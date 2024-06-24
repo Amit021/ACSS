@@ -34,6 +34,9 @@ class DateFilterForm(forms.Form):
 def landing(request):
     return render(request, 'landing.html')
 
+def doctor_settings(request):
+    return render(request, 'doctor_settings.html')
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -43,10 +46,10 @@ def register(request):
             if user.role == 'doctor':
                 return redirect('doctor_dashboard')
             else:
-                return redirect('select_mood')
+                return redirect('dashboard')
     else:
         form = RegisterForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {'form': form}) 
 
 def login_view(request):
     if request.method == 'POST':

@@ -1,0 +1,58 @@
+{% block title %}Send Symptoms to Doctor{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    .btn-send {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-send:hover {
+        background-color: #0056b3;
+    }
+
+    .message {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <h2>Send Symptoms to Doctor</h2>
+    <button class="btn-send" onclick="sendSymptoms()">Send Symptoms</button>
+    <div id="message" class="message"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    function sendSymptoms() {
+        $.ajax({
+            url: '{% url "send_symptoms_to_doctor" %}', // URL of the view
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}' // CSRF token for security
+            },
+            success: function(response) {
+                $('#message').text(response.message);
+                $('#message').css('color', response.status === 'success' ? 'green' : 'red');
+            },
+            error: function(xhr, status, error) {
+                $('#message').text('An error occurred. Please try again.');
+                $('#message').css('color', 'red');
+            }
+        });
+    }
+</script>
+{% endblock %}

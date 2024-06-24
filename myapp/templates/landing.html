@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Schizotrack</title>
+    <style>
+      
+      
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    
+
+        font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0; 
+            /* background: linear-gradient(to right, #007bff, #00d4ff); */
+            background: linear-gradient(to right, #7de2fc, #b9b6e5);
+      }
+
+      .container {
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #163c66;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-right: 10px;
+      }
+      .button-xl {
+  font-size: 1.5em; /* Adjust the size as needed */
+  padding: 0.75em 1.5em; /* Adjust the padding as needed */
+}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Welcome to Schizotrack</h2>
+      <p>
+        <a href="{% url 'login' %}" class="button button-xl">Login</a>
+        <a href="{% url 'register' %}" class="button button-xl">Register</a>
+      </p>
+    </div>
+  </body>
+</html>

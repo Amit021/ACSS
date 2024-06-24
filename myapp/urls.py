@@ -2,12 +2,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.landing, name='landing'),
+    path('', views.landing, name='landing'), #landing page
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('select_mood/', views.show_mood_selection, name='select_mood'),
     path('record_mood/', views.record_mood, name='record_mood'),
+    path('view_feedback/', views.view_feedback, name='view_feedback'),
     path('view_statistics/', views.view_statistics, name='view_statistics'),
     path('view_feedback/', views.view_feedback, name='view_feedback'),
     path('api/mood_statistics/', views.api_mood_statistics, name='api_mood_statistics'),
@@ -23,4 +24,5 @@ urlpatterns = [
     path('add_patient/', views.add_patient, name='add_patient'),
     path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
     path('dashboard/', views.dashboard, name='dashboard'), 
+    path('doctor_settings/', views.doctor_settings, name='doctor_settings'), 
 ]

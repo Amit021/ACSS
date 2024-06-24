@@ -1,0 +1,90 @@
+<!-- templates/view_settings.html -->
+{% extends 'base.html' %} {% block content %}
+
+
+
+<div class="settings-container container mt-5">
+  <h1 class="mb-4">Settings</h1>
+  <form>
+    <div class="form-group form-check">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        id="notification"
+        name="notification"
+      />
+      <label class="form-check-label" for="notification"
+        >Enable Notifications:</label
+      >
+    </div>
+    <div class="form-group">
+      <label for="theme">Choose Theme:</label>
+      <select id="theme" name="theme" class="form-control">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Settings</button>
+  </form>
+
+  <a href="{% url 'logout' %}" class="btn btn-danger my-5">Logout</a>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JavaScript for theme change -->
+<script>
+  $(document).ready(function () {
+    // Function to save settings to local storage
+    function saveSettingsToLocalStorage(theme) {
+      localStorage.setItem("theme", theme);
+    }
+
+    // Function to load settings from local storage
+    function loadSettingsFromLocalStorage() {
+      var theme = localStorage.getItem("theme");
+      if (theme === "dark") {
+        $("body").css({
+          "background-color": "#343a40",
+          color: "#ffffff",
+        }); // Change to dark theme
+      } else {
+        $("body").css({
+          "background-color": "#f8f9fa",
+          color: "#000000",
+        }); // Change to light theme
+      }
+    }
+
+    // Listen for form submission
+    $("form").submit(function (event) {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Get the selected theme
+      var selectedTheme = $("#theme").val();
+
+      // Apply the theme changes
+      if (selectedTheme === "dark") {
+        $("body").css({
+          "background-color": "#343a40",
+          color: "#ffffff",
+        }); // Change to dark theme
+      } else {
+        $("body").css({
+          "background-color": "#f8f9fa",
+          color: "#000000",
+        }); // Change to light theme
+      }
+
+      // Save settings to local storage
+      saveSettingsToLocalStorage(selectedTheme);
+    });
+
+    // Load settings from local storage on page load
+    loadSettingsFromLocalStorage();
+  });
+</script>
+
+{% endblock %}
