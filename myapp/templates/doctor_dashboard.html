@@ -1,305 +1,116 @@
-{% extends "doctor_base.html" %}
-
-{% block title %}Doctor Dashboard{% endblock %}
-
-{% block content %}
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #7de2fc, #b9b6e5);
-        }
+    {% load static %}
+    <!-- Bootstrap CSS for collapsible elements -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        header {
-            background-color: #fff;
-            padding: 20px 0;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        .dashboard {
-            background-color: #f0f8ff;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            margin-top: 0;
-        }
-
-        .add-patient {
-            margin-bottom: 20px;
-        }
-
-        .add-patient form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .add-patient label,
-        .add-patient input,
-        .add-patient button {
-            margin: 5px 0;
-        }
-
-        .add-patient input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 80%;
-        }
-
-        .add-patient button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .add-patient button:hover {
-            background-color: #0056b3;
-        }
-
-        .patient-record {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .patient-record h3 {
-            margin: 0;
-        }
-
-        .patient-record p {
-            margin: 5px 0;
-        }
-
-        .symptom-record {
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .symptom-record button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-bottom: 5px;
-        }
-
-        .symptom-record button:hover {
-            background-color: #0056b3;
-        }
-
-        .times {
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-            max-height: 0;
-            opacity: 0;
-        }
-
-        .times.show {
-            max-height: 1000px;
-            opacity: 1;
-        }
-        
-        .symptom-details {
-            margin: 10px 0;
-            padding: 10px;
-            background: #e9f7fe;
-            border: 1px solid #bce4fa;
-            border-radius: 5px;
-            text-align: left;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Shizotrack</h1>
-        </header>
-
-       
-        <div class="dashboard">
-            <h2>Doctor Dashboard</h2>
-            <div class="add-patient">
-                <h3>Add New Patient</h3>
-                <div class="mt-4">
-                    <h3>Add Patient</h3>
-                    <form method="post">
+    <div class="header-container">
+        
+        <span class="app-name">Shizotrack</span>
+    </div>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Doctor Dashboard</h1>
+            <!-- Form to add a new patient -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    Add New Patient
+                </div>
+                <div class="card-body">
+                    <form method="POST">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Add Patient</button>
+                        <button type="submit" class="btn">Add Patient</button>
                     </form>
                 </div>
             </div>
-
-
-
-            {% for patient_username, data in patients_data.items %}
-            <div class="patient-record">
-               
-                <h3>Patient Username:  {{ data.patient.username }}</h3>
-                <p>Email:  {{ data.patient.email }}</p>
-                <div class="symptom-record" onclick="toggleTimes(this)">
-                    <button type="button">Date: June 15, 2024</button>
-                     
-                 
-                   
-                        {% for record in data.records %}
-                    <div class="times">
-                        <button type="button" onclick="toggleDetails(event)">Time: {{ record.timestamp }}</button>
-                        <div class="symptom-details" style="display: block;">
-                            <p>Symptom Type: {{ record.symptom_type }} r</p>
-                            <p>Description:  {{ record.description }} r</p>
-                            <p>Severity: {{ record.severity }}</p>
-                            <p>MCQ Answers: 
-                                {% for key, value in record.mcq_answers.items %}
-                                <li>{{ key }}: {{ value }}</li>
-                                {% endfor %}
-                            </p>
-                        </div>
+            {% for username, data in patients_data.items %}
+                <div class="patient-section">
+                    
+                    <p><strong>Patient Username:</strong> {{ username }}</p>
+                    <p><strong>Email:</strong> {{ data.patient.email }}</p>
+                    
+                    <h4>Symptom Records:</h4>
+                    <div id="accordion-{{ username }}">
+                        {% with data.records as records %}
+                            {% regroup records by timestamp.date as date_groups %}
+                            {% for date_group in date_groups %}
+                            <div class="card">
+                                <div class="card-header" id="heading-{{ username }}-date-{{ forloop.counter }}">
+                                    <h5 class="mb-0">
+                                        <button class="btn-link" data-toggle="collapse" data-target="#collapse-{{ username }}-date-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ username }}-date-{{ forloop.counter }}">
+                                            Date: {{ date_group.grouper }}
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapse-{{ username }}-date-{{ forloop.counter }}" class="collapse" aria-labelledby="heading-{{ username }}-date-{{ forloop.counter }}" data-parent="#accordion-{{ username }}">
+                                    <div class="card-body">
+                                        {% with date_group.list as time_records %}
+                                            {% regroup time_records by timestamp|date:"H:i" as time_groups %}
+                                            <div id="accordion-{{ username }}-time-{{ date_group.grouper }}">
+                                                {% for time_group in time_groups %}
+                                                    <div class="card">
+                                                        <div class="card-header" id="heading-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                            <h5 class="mb-0">
+                                                                <button class="btn-link" data-toggle="collapse" data-target="#collapse-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                                    Time: {{ time_group.grouper }}
+                                                                </button>
+                                                            </h5>
+                                                        </div>
+                                                        <div id="collapse-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="collapse" aria-labelledby="heading-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-parent="#accordion-{{ username }}-time-{{ date_group.grouper }}">
+                                                            <div class="card-body">
+                                                                {% for record in time_group.list %}
+                                                                    <div class="symptom-item">
+                                                                        <p><strong>Symptom Type:</strong> {{ record.symptom_type }}</p>
+                                                                        <p><strong>Description:</strong> {{ record.description }}</p>
+                                                                        <p><strong>Severity:</strong> {{ record.severity }}</p>
+                                                                        <p><strong>MCQ Answers:</strong> {{ record.mcq_answers }}</p>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            {% endfor %}
+                        {% endwith %}
                     </div>
-                        {% endfor %}
-                   
-                  
                 </div>
-            </div>
-
             {% endfor %}
-
-
-
-           
         </div>
     </div>
+
+    <!-- Bootstrap JS for collapsible elements -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-        document.getElementById('addPatientForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-           
+        document.addEventListener('DOMContentLoaded', function() {
+            var coll = document.querySelectorAll(".collapsible");
+            coll.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
         });
-
-        function toggleTimes(element) {
-            const times = element.querySelector('.times');
-            times.classList.toggle('show');
-            alert("hi");
-        }
-
-        function toggleDetails(event) {
-            event.stopPropagation();
-            const button = event.target;
-            const details = button.nextElementSibling;
-            if (details.style.display === 'none' || details.style.display === '') {
-                details.style.display = 'block';
-            } else {
-                details.style.display = 'none';
-            }
-        }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-<div class="container mt-5">
-    <!-- <h2 class="text-center">Doctor Dashboard</h2> -->
-
-    <!-- <div class="mt-4">
-        <h3>Add Patient</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Add Patient</button>
-        </form>
-    </div> -->
-
-    <!-- <div class="mt-5">
-        <h3>Patients</h3>
-        {% for patient_username, data in patients_data.items %}
-            <div class="card mt-3" id="card">
-                <div class="card-header">
-                    {{ data.patient.username }}
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        {% for record in data.records %}
-                            <li class="list-group-item">
-                                <strong>Timestamp:</strong> {{ record.timestamp }}<br>
-                                <strong>Symptom Type:</strong> {{ record.symptom_type }}<br>
-                                <strong>Description:</strong> {{ record.description }}<br>
-                                <strong>Severity:</strong> {{ record.severity }}<br>
-                                <strong>MCQ Answers:</strong>
-                                <ul>
-                                    {% for key, value in record.mcq_answers.items %}
-                                        <li>{{ key }}: {{ value }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        {% endfor %}
-    </div> -->
-</div>
-
-<!-- <script>
-      document.addEventListener("DOMContentLoaded", function () {
-    function loadSettingsFromLocalStorage() {
-      var theme = localStorage.getItem("theme");
-      console.log("Loaded theme:", theme); // Debugging line
-      let idElement = document.getElementById("id");
-      let card = document.getElementById("card");
-      if (theme === "dark") {
-        document.body.style.backgroundColor = "#343a40";
-        document.body.style.color = "#ffffff";
-        card.style.color = "black";
-      } else {
-        document.body.style.backgroundColor = "#f8f9fa";
-        document.form.style.color = "#343a40";
-       
-      }
-    }
-
-    loadSettingsFromLocalStorage();
-  });
-</script> -->
-{% endblock %}
