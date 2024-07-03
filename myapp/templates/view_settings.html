@@ -1,0 +1,18 @@
+<!-- templates/view_settings.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Settings</h1>
+<div class="settings-container">
+    <form>
+        <label for="notification">Enable Notifications:</label>
+        <input type="checkbox" id="notification" name="notification"><br><br>
+        <label for="theme">Choose Theme:</label>
+        <select id="theme" name="theme">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select><br><br>
+        <input type="submit" value="Save Settings">
+    </form>
+</div>
+{% endblock %}

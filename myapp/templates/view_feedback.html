@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Mood Feedback Over Time</h1>
+<div class="chart-container">
+    <canvas id="moodChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const moodRecords = JSON.parse('{{ mood_records|escapejs }}');
+    const ctx = document.getElementById('moodChart').getContext('2d');
+
+    const labels = moodRecords.map(record => new Date(record.timestamp).toLocaleString());
+    const data = moodRecords.map(record => {
+        switch (record.mood_rating) {
+            case 'very bad': return 1;
+            case 'bad': return 2;
+            case 'average': return 3;
+            case 'good': return 4;
+            case 'very good': return 5;
+            default: return 0;
+        }
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Mood Rating',
+                data: data,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            switch (value) {
+                                case 1: return 'Very Bad';
+                                case 2: return 'Bad';
+                                case 3: return 'Average';
+                                case 4: return 'Good';
+                                case 5: return 'Very Good';
+                                default: return value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

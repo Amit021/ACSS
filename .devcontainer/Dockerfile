@@ -20,3 +20,5 @@ RUN chmod +x .devcontainer/entrypoint.sh
 
 # Specify the entrypoint script
 ENTRYPOINT [".devcontainer/entrypoint.sh"]
+
+EXPOSE 8000

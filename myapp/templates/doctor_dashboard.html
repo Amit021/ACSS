@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    {% load static %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #fffff0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .header-container {
+            width: 100%;
+            background: #c6e1f2;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            z-index: 1000;
+            position: fixed;
+            top: 0;
+        }
+
+        .header-container img {
+            width: 70px;
+            vertical-align: middle;
+        }
+
+        .header-container .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 10px;
+            color: black;
+        }
+
+        .header-container .nav-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-container .nav-link {
+            color: black;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        .header-container .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-top: 80px;
+            overflow-y: auto;
+        }
+
+        .form-container {
+            background: rgba(2, 38, 49, 0.1);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 26px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background: rgba(0, 110, 255, 0.8);
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            border: none !important;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body form {
+            margin: 0;
+        }
+
+        .card-body form .btn {
+            background-color: rgba(0, 110, 255, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: center;
+            width: 100%;
+            transition: background-color 0.3s, color 0.3s;
+            box-shadow: none !important;
+        }
+
+        .card-body form .btn:hover {
+            background-color: rgba(0, 255, 182, 0.8);
+            color: #fff;
+        }
+
+        .btn-link {
+            background-color: rgba(0, 110, 255, 0.8);
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none !important;
+            text-align: center;
+            outline: none !important;
+            font-size: 18px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            box-shadow: none !important;
+        }
+
+        .btn-link:hover {
+            background-color: rgba(0, 110, 255, 0.8);
+            color: white;
+        }
+
+        .btn-link:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-link:active {
+            background-color: rgba(0, 110, 255, 1);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .content-inner {
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .symptom-item {
+            background: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .symptom-item ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .symptom-item ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        
+        <span class="app-name">Shizotrack</span>
+        <div class="nav-container">
+            <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Doctor Dashboard</h1>
+            <div class="card mb-4">
+                <div class="card-header">
+                    Add New Patient
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn">Add Patient</button>
+                    </form>
+                </div>
+            </div>
+            {% for username, data in patients_data.items %}
+                <div class="patient-section">
+                    <p><strong>Patient Username:</strong> {{ username }}</p>
+                    <p><strong>Email:</strong> {{ data.patient.email }}</p>
+                    <h4>Symptom Records:</h4>
+                    <div id="accordion-{{ username }}">
+                        {% with data.records as records %}
+                            {% regroup records by timestamp.date as date_groups %}
+                            {% for date_group in date_groups %}
+                            <div class="card">
+                                <div class="card-header" id="heading-{{ username }}-date-{{ forloop.counter }}">
+                                    <h5 class="mb-0">
+                                        <button class="btn-link" data-toggle="collapse" data-target="#collapse-{{ username }}-date-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ username }}-date-{{ forloop.counter }}">
+                                            Date: {{ date_group.grouper }}
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapse-{{ username }}-date-{{ forloop.counter }}" class="collapse" aria-labelledby="heading-{{ username }}-date-{{ forloop.counter }}" data-parent="#accordion-{{ username }}">
+                                    <div class="card-body">
+                                        {% with date_group.list as time_records %}
+                                            {% regroup time_records by timestamp|date:"H:i" as time_groups %}
+                                            <div id="accordion-{{ username }}-time-{{ date_group.grouper }}">
+                                                {% for time_group in time_groups %}
+                                                    <div class="card">
+                                                        <div class="card-header" id="heading-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                            <h5 class="mb-0">
+                                                                <button class="btn-link" data-toggle="collapse" data-target="#collapse-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                                    Time: {{ time_group.grouper }}
+                                                                </button>
+                                                            </h5>
+                                                        </div>
+                                                        <div id="collapse-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="collapse" aria-labelledby="heading-{{ username }}-time-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-parent="#accordion-{{ username }}-time-{{ date_group.grouper }}">
+                                                            <div class="card-body">
+                                                                {% for record in time_group.list %}
+                                                                    <div class="symptom-item">
+                                                                        <p><strong>Symptom Type:</strong> {{ record.symptom_type }}</p>
+                                                                        <p><strong>Description:</strong> {{ record.description }}</p>
+                                                                        <p><strong>Severity:</strong> {{ record.severity }}</p>
+                                                                        <p><strong>MCQ Answers:</strong> {{ record.mcq_answers }}</p>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endwith %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
