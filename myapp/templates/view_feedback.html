@@ -1,127 +1,58 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
 
-<h1 class="text-center my-3">Mood Statistics</h1>
+{% block content %}
+<h1>Mood Feedback Over Time</h1>
 <div class="chart-container">
-  <canvas id="statisticsChart"></canvas>
-</div>
-
-<h1 class="text-center">Mood Feedback Over Time</h1>
-<div class="chart-container">
-  <canvas id="moodChart"></canvas>
+    <canvas id="moodChart"></canvas>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const moodRecords = JSON.parse("{{ mood_records|escapejs }}");
-  const ctx = document.getElementById("moodChart").getContext("2d");
+    const moodRecords = JSON.parse('{{ mood_records|escapejs }}');
+    const ctx = document.getElementById('moodChart').getContext('2d');
 
-  const labels = moodRecords.map((record) =>
-    new Date(record.timestamp).toLocaleString()
-  );
-  const data = moodRecords.map((record) => {
-    switch (record.mood_rating) {
-     
-      case "bad":
-        return 1;
-      case "average":
-        return 2;
-      case "good":
-        return 3;
-   
-      default:
-        return 0;
-    }
-  });
+    const labels = moodRecords.map(record => new Date(record.timestamp).toLocaleString());
+    const data = moodRecords.map(record => {
+        switch (record.mood_rating) {
+            case 'very bad': return 1;
+            case 'bad': return 2;
+            case 'average': return 3;
+            case 'good': return 4;
+            case 'very good': return 5;
+            default: return 0;
+        }
+    });
 
-  new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Mood Rating",
-          data: data,
-          borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          fill: true,
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Mood Rating',
+                data: data,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            }]
         },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function (value) {
-              switch (value) {
-            
-                case 1:
-                  return "Bad";
-                case 2:
-                  return "Average";
-                case 3:
-                  return "Good";
-               
-                default:
-                  return value;
-              }
-            },
-          },
-        },
-      },
-    },
-  });
-
-
-
-
-
-
-
-  const ctx1 = document.getElementById("statisticsChart").getContext("2d");
-  new Chart(ctx1, {
-    type: "bar",
-    data: {
-      labels: ["Bad", "Average", "Good"],
-      datasets: [
-        {
-          label: "Mood Count",
-          data: [12, 19, 3, 5, 2], // Example data
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-
-
-
-
-
-
-  document.addEventListener("DOMContentLoaded", function () {
-    function loadSettingsFromLocalStorage() {
-      var theme = localStorage.getItem("theme");
-      console.log("Loaded theme:", theme); // Debugging line
-      let idElement = document.getElementById("id");
-
-      if (theme === "dark") {
-        document.body.style.backgroundColor = "#343a40";
-        document.body.style.color = "#ffffff";
-      } else {
-        document.body.style.backgroundColor = "#f8f9fa";
-        document.form.style.color = "#343a40";
-      }
-    }
-
-    loadSettingsFromLocalStorage();
-  });
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            switch (value) {
+                                case 1: return 'Very Bad';
+                                case 2: return 'Bad';
+                                case 3: return 'Average';
+                                case 4: return 'Good';
+                                case 5: return 'Very Good';
+                                default: return value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
 {% endblock %}

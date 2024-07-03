@@ -1,86 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %}Doctor Dashboard{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-       
-       
-       .cc{
-        width: 100%;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-       }
-        .containerv {
-            padding: 20px;
-            background-color: #333;
-            margin: 20px;
-            border-radius: 8px;
-            width: 50%;
-        }
-        h1 {
-            color: #f1f1f1;
-        }
-        .activities {
-            list-style-type: none;
-            padding: 0;
-        }
-        .activities li {
-            background-color: #444;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .welcome-message {
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-   
-
-  <div class="cc">
-    <div class="containerv">
-        <div class="welcome-message text-white text-center">
-          <h1>Welcome to Schizotrack</h1>
-          <p>A place where where you can track and analyze your symptoms</p>
-          <p class="text-bold">Welcome, {{ request.user.username }}!</p>
+<div class="container mt-5">
+    <h1 class="text-center mb-5" style="margin-top: 40px;">Welcome to ShizoTrack</h1> <!-- Added margin-top to push the title down -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Track</h2>
+                    <p class="card-text">Track your mood and symptoms</p>
+                    <a href="{% url 'select_mood' %}" class="btn btn-primary">Mood</a>
+                    <a href="{% url 'select_symptom' %}" class="btn btn-primary">Symptoms</a>
+                </div>
+            </div>
         </div>
-       
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">View</h2>
+                    <p class="card-text">View your statistics</p>
+                    <a href="{% url 'view_statistics' %}" class="btn btn-primary">Statistics</a>
+                    <a href="{% url 'view_symptoms' %}" class="btn btn-primary">Symptoms</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Settings</h2>
+                    <p class="card-text">Adjust your settings</p>
+                    <a href="{% url 'view_settings' %}" class="btn btn-primary">Settings</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          function loadSettingsFromLocalStorage() {
-              var theme = localStorage.getItem("theme");
-              console.log("Loaded theme:", theme); // Debugging line
-
-              if (theme === "dark") {
-                  document.body.style.backgroundColor = "#343a40";
-                  document.body.style.color = "#ffffff";
-              } else {
-                  document.body.style.backgroundColor = "#f8f9fa";
-                  document.body.style.color = "#343a40";
-              }
-          }
-
-          loadSettingsFromLocalStorage();
-      });
-  </script>
-</body>
-</html>
-
+</div>
 {% endblock %}

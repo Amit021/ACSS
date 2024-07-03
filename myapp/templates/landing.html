@@ -1,49 +1,154 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Schizotrack</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to SchizoTrack</title>
+    {% load static %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
-      
-      
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    
-
-        font-family: Arial, sans-serif;
+        body {
+            background: #fffff0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0; 
-            /* background: linear-gradient(to right, #007bff, #00d4ff); */
-            background: linear-gradient(to right, #7de2fc, #b9b6e5);
-      }
+            overflow: hidden;
+        }
 
-      .container {
-        text-align: center;
-      }
-      .button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #163c66;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-right: 10px;
-      }
-      .button-xl {
-  font-size: 1.5em; /* Adjust the size as needed */
-  padding: 0.75em 1.5em; /* Adjust the padding as needed */
-}
+        .header-container {
+            width: 100%;
+            background: #c6e1f2;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            z-index: 1000;
+            position: fixed;
+            top: 0;
+        }
+
+        .header-container img {
+            width: 70px;
+            vertical-align: middle;
+        }
+
+        .header-container .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 10px;
+            color: black;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            margin-top: 10px; /* Adjusted this value to ensure the content is properly positioned */
+        }
+
+        .content-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .text-content {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .text-content h2 {
+            font-size: 36px;
+            color: rgba(2, 38, 49, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .text-content p {
+            font-size: 20px;
+            color: rgba(2, 38, 49, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            border-radius: 5px;
+            background-color: rgba(0, 110, 255, 0.8);
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: rgba(0, 255, 182, 0.8);
+        }
+
+        .try-box {
+            background: rgba(0, 110, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+            color: rgba(0, 110, 255, 0.8);
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .logo-container {
+            flex-shrink: 0;
+            padding-left: 40px;
+        }
+
+        .logo-container img {
+            width: 200px; /* Adjust the size as needed */
+            height: 300px;
+        }
+
+        
+        
+        
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Welcome to Schizotrack</h2>
-      <p>
-        <a href="{% url 'login' %}" class="button button-xl">Login</a>
-        <a href="{% url 'register' %}" class="button button-xl">Register</a>
-      </p>
+</head>
+<body>
+    <div class="header-container">
+        <span class="app-name">SchizoTrack</span>
     </div>
-  </body>
+    <div class="main-container">
+        <div class="content-wrapper">
+            <div class="text-content">
+                <h2>SchizoTrack</h2>
+                <p>Track, Understand, and Manage Schizophrenia Symptoms</p>
+                <p>Managing schizophrenia is challenging. Getting support should not be. Our web platform provides the tools you need to track symptoms, understand patterns, and manage your mental health. With personalized insights and resources, SchizoTrack helps you stay on top of your well-being, offering clarity and control. Empower your journey to better mental health with SchizoTrack.</p>
+                <div class="btn-container">
+                    <a href="{% url 'login' %}" class="btn-custom">Login</a>
+                    <a href="{% url 'register' %}" class="btn-custom">Register</a>
+                </div>
+                <div class="try-box">
+                    Try SchizoTrack for Free
+                </div>
+            </div>
+            <div class="logo-container">
+                <img src="{% static 'images/logo.png' %}" alt="Shizotrack Logo">
+            </div>
+        </div>
+    </div>
+</body>
 </html>

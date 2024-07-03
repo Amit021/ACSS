@@ -1,17 +1,10 @@
-<!-- add_patient.html -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Patient</title>
-</head>
-<body>
-    <h2>Add Patient</h2>
-    
+{% block content %}
+    <h1>Add Patient</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Add Patient</button>
     </form>
-</body>
-</html>
+{% endblock %}

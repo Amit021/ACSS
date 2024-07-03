@@ -1,137 +1,307 @@
-<!-- templates/view_statistics.html -->
-{% extends 'base.html' %} {% block content %}
-<h1 class="text-center my-3">Mood Statistics</h1>
-<div class="chart-container">
-  <canvas id="statisticsChart"></canvas>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics - Shizotrack</title>
+    {% load static %}
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        body {
+            background: #fffff0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: auto;
+            height: 100vh;
+        }
 
+        .header-container {
+            width: 100%;
+            background: #c6e1f2;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            z-index: 1000;
+            position: fixed;
+            top: 0;
+        }
 
+        .header-container img {
+            width: 70px;
+            vertical-align: middle;
+        }
 
-<h1 class="text-center">Mood Feedback Over Time</h1>
-<div class="chart-container">
-  <canvas id="moodChart"></canvas>
-</div>
+        .header-container .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 10px;
+            color: black;
+        }
 
+        .nav-container {
+            display: flex;
+            align-items: center;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        .nav-link {
+            color: black;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+        }
 
+        .nav-link:hover {
+            text-decoration: underline;
+        }
 
-<script>
-  // Placeholder for future Chart.js integration
-  const ctx = document.getElementById("statisticsChart").getContext("2d");
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: [ "Bad", "Average", "Good"],
-      datasets: [
-        {
-          label: "Mood Count",
-          data: [12, 19, 3, 5, 2], // Example data
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin-top: 80px;
+        }
 
+        .filter-container {
+            margin: 20px;
+            text-align: center;
+        }
 
+        .filter-container form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .filter-container input[type="text"] {
+            padding: 10px;
+            margin: 0 10px;
+            border: 1px solid #02a9f7;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(2, 38, 49, 0.2);
+            color: rgb(64, 118, 143);
+        }
 
+        .filter-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #02a9f7;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
 
+        .filter-container button:hover {
+            background-color: #0284c7;
+        }
 
+        .charts-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%; /* Set the width to 90% */
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
+        .chart {
+            background: rgba(2, 38, 49, 0.2); /* Add opacity */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            width: 100%;
+        }
 
+        .chart h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
 
+        .chart svg {
+            background: rgba(2, 38, 49, 0.2);
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="header-left">
+            <span class="app-name">ShizoTrack</span>
+        </div>
+        <div class="nav-container">
+            <a class="nav-link" href="{% url 'dashboard' %}">Home</a>
+            <a class="nav-link" href="{% url 'select_mood' %}">Mood</a>
+            <a class="nav-link" href="{% url 'select_symptom' %}">Symptom</a>
+            <a class="nav-link" href="{% url 'view_statistics' %}">View Statistics</a>
+            <a class="nav-link" href="{% url 'view_symptoms' %}">View Symptoms</a>
+            <a class="nav-link" href="{% url 'view_settings' %}">Settings</a>
+            <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="filter-container">
+            <form method="get" action="{% url 'view_statistics' %}" id="filter-form">
+                <label for="start_date">Start date:</label>
+                <input type="text" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
+                <label for="end_date">End date:</label>
+                <input type="text" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+                <button type="submit" onclick="checkFilterValues()">Filter</button>
+            </form>
+        </div>
 
+        <div class="charts-container">
+            <div class="chart" id="mood-statistics">
+                <h2>Mood Statistics</h2>
+                <svg></svg>
+            </div>
 
+            <div class="chart" id="mood-feedback">
+                <h2>Mood Feedback Over Time</h2>
+                <svg></svg>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        flatpickr("#start_date", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            theme: "material_blue" // You can change the theme to match your design
+        });
 
-  const moodRecords = JSON.parse("{{ mood_records|escapejs }}");
-  const ctxx = document.getElementById("moodChart").getContext("2d");
+        flatpickr("#end_date", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            theme: "material_blue" // You can change the theme to match your design
+        });
 
-  const labels = moodRecords.map((record) =>
-    new Date(record.timestamp).toLocaleString()
-  );
-  const data = moodRecords.map((record) => {
-    switch (record.mood_rating) {
-   
-      case "bad":
-        return 1;
-      case "average":
-        return 2;
-      case "good":
-        return 3;
-      default:
-        return 0;
-    }
-  }); 
+        function checkFilterValues() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            console.log(`Filter Start Date: ${startDate}`);
+            console.log(`Filter End Date: ${endDate}`);
+        }
 
-  new Chart(ctxx, {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Mood Rating",
-          data: data,
-          borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function (value) {
-              switch (value) {
-                case 1:
-                  return "Bad";
-                case 2:
-                  return "Average";
-                case 3:
-                  return "Good";
-                default:
-                  return value;
-              }
-            },
-          },
-        },
-      },
-    },
-  });
+        document.addEventListener('DOMContentLoaded', function() {
+            const moodStatisticsData = JSON.parse('{{ mood_statistics|escapejs }}');
+            const moodFeedbackData = JSON.parse('{{ mood_feedback|escapejs }}');
 
+            console.log("Mood Statistics Data:", moodStatisticsData);
+            console.log("Mood Feedback Data:", moodFeedbackData);
 
+            renderMoodStatistics(moodStatisticsData);
+            renderMoodFeedback(moodFeedbackData);
 
+            function renderMoodStatistics(data) {
+                const svg = d3.select('#mood-statistics svg');
+                const margin = {top: 20, right: 30, bottom: 40, left: 40};
+                const width = svg.node().clientWidth - margin.left - margin.right;
+                const height = svg.node().clientHeight - margin.top - margin.bottom;
+                const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-  document.addEventListener("DOMContentLoaded", function () {
-    function loadSettingsFromLocalStorage() {
-      var theme = localStorage.getItem("theme");
-      console.log("Loaded theme:", theme); // Debugging line
-      let idElement = document.getElementById("id");
+                const x = d3.scaleBand()
+                    .domain(data.map(d => d.mood_rating))
+                    .range([0, width])
+                    .padding(0.1);
 
-      if (theme === "dark") {
-        document.body.style.backgroundColor = "#343a40";
-        document.body.style.color = "#ffffff";
-      } else {
-        document.body.style.backgroundColor = "#f8f9fa";
-        document.form.style.color = "#343a40";
-      }
-    }
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.count)])
+                    .nice()
+                    .range([height, 0]);
 
-    loadSettingsFromLocalStorage();
-  });
-</script>
-{% endblock %}
+                g.append('g')
+                    .attr('class', 'x-axis')
+                    .attr('transform', `translate(0,${height})`)
+                    .call(d3.axisBottom(x));
+
+                g.append('g')
+                    .attr('class', 'y-axis')
+                    .call(d3.axisLeft(y));
+
+                g.selectAll('.bar')
+                    .data(data)
+                    .enter().append('rect')
+                    .attr('class', 'bar')
+                    .attr('x', d => x(d.mood_rating))
+                    .attr('y', d => y(d.count))
+                    .attr('width', x.bandwidth())
+                    .attr('height', d => height - y(d.count))
+                    .attr('fill', 'skyblue');
+            }
+
+            function renderMoodFeedback(data) {
+                const svg = d3.select('#mood-feedback svg');
+                const margin = {top: 20, right: 30, bottom: 40, left: 40};
+                const width = svg.node().clientWidth - margin.left - margin.right;
+                const height = svg.node().clientHeight - margin.top - margin.bottom;
+                const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+                const x = d3.scaleTime()
+                    .domain(d3.extent(data, d => new Date(d.timestamp)))
+                    .range([0, width]);
+
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => {
+                        switch (d.mood_rating) {
+                            case 'bad': return 1;
+                            case 'neutral': return 2;
+                            case 'good': return 3;
+                        }
+                    })])
+                    .nice()
+                    .range([height, 0]);
+
+                g.append('g')
+                    .attr('class', 'x-axis')
+                    .attr('transform', `translate(0,${height})`)
+                    .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y-%m-%d %H:%M:%S')));
+
+                g.append('g')
+                    .attr('class', 'y-axis')
+                    .call(d3.axisLeft(y));
+
+                g.append('path')
+                    .datum(data)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#124264') /* Changed color */
+                    .attr('stroke-width', 2.5) /* Thicker line */
+                    .attr('d', d3.line()
+                        .x(d => x(new Date(d.timestamp)))
+                        .y(d => y(
+                            (d.mood_rating === 'bad') ? 1 :
+                            (d.mood_rating === 'neutral') ? 2 :
+                            3
+                        ))
+                    );
+
+                g.selectAll('.dot')
+                    .data(data)
+                    .enter().append('circle')
+                    .attr('class', 'dot')
+                    .attr('cx', d => x(new Date(d.timestamp)))
+                    .attr('cy', d => y(
+                        (d.mood_rating === 'bad') ? 1 :
+                        (d.mood_rating === 'neutral') ? 2 :
+                        3
+                    ))
+                    .attr('r', 3) /* Slightly larger dots */
+                    .attr('fill', '#124264'); /* Changed color */
+            }
+        });
+    </script>
+</body>
+</html>
