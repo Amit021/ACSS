@@ -3,38 +3,52 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+
+<style>
+    body{
+        background-color: #DCF0F7     ;
+    }
+</style>
+<body>
 <div class="container mt-5">
     <h1 class="text-center mb-5" style="margin-top: 40px;">Welcome to ShizoTrack</h1> <!-- Added margin-top to push the title down -->
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h2 class="card-title">Track</h2>
                     <p class="card-text">Track your mood and symptoms</p>
-                    <a href="{% url 'select_mood' %}" class="btn btn-primary">Mood</a>
-                    <a href="{% url 'select_symptom' %}" class="btn btn-primary">Symptoms</a>
+                    <div class="d-flex justify-content-between mt-auto">
+                        <a href="{% url 'select_mood' %}" class="btn btn-primary btn-sm btn-md">Mood</a>
+                        <a href="{% url 'select_symptom' %}" class="btn btn-primary btn-sm btn-md">Symptoms</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h2 class="card-title">View</h2>
                     <p class="card-text">View your statistics</p>
-                    <a href="{% url 'view_statistics' %}" class="btn btn-primary">Statistics</a>
-                    <a href="{% url 'view_symptoms' %}" class="btn btn-primary">Symptoms</a>
+                    <div class="d-flex justify-content-between mt-auto">
+                        <a href="{% url 'view_statistics' %}" class="btn btn-primary btn-sm btn-md">Statistics</a>
+                        <a href="{% url 'view_symptoms' %}" class="btn btn-primary btn-sm btn-md">Symptoms</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h2 class="card-title">Settings</h2>
                     <p class="card-text">Adjust your settings</p>
-                    <a href="{% url 'view_settings' %}" class="btn btn-primary">Settings</a>
+                    <div class="d-flex justify-content-between mt-auto">
+                        <a href="{% url 'view_settings' %}" class="btn btn-primary btn-sm btn-md">Settings</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</body>
 {% endblock %}

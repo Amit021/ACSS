@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         body {
-            background: #fffff0;
+            background: #DCF0F7;
             font-family: 'Arial', sans-serif;
             margin: 0;
             overflow: auto;
@@ -136,20 +139,7 @@
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <div class="header-left">
-            <span class="app-name">ShizoTrack</span>
-        </div>
-        <div class="nav-container">
-            <a class="nav-link" href="{% url 'dashboard' %}">Home</a>
-            <a class="nav-link" href="{% url 'select_mood' %}">Mood</a>
-            <a class="nav-link" href="{% url 'select_symptom' %}">Symptom</a>
-            <a class="nav-link" href="{% url 'view_statistics' %}">View Statistics</a>
-            <a class="nav-link" href="{% url 'view_symptoms' %}">View Symptoms</a>
-            <a class="nav-link" href="{% url 'view_settings' %}">Settings</a>
-            <a class="nav-link" href="{% url 'logout' %}">Log out</a>
-        </div>
-    </div>
+    
     <div class="container">
         <div class="filter-container">
             <form method="get" action="{% url 'view_statistics' %}" id="filter-form">
@@ -305,3 +295,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

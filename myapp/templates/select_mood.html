@@ -11,7 +11,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: #fffff0;
+             
             font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
@@ -76,7 +76,7 @@
         }
 
         .form-container {
-            background: rgba(225, 231, 224, 0.3);
+            background: #00b489;
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -87,11 +87,12 @@
 
         .form-container h2, .form-container p, .form-container .unusual-behavior {
             text-align: left;
-            color: #333;
+ 
         }
 
         .form-container h2 {
             font-size: 28px;
+            color: #ffffff;
         }
 
         .form-container p {
@@ -100,20 +101,22 @@
 
         .emoji-container {
             display: flex;
-            flex-direction: column; /* Change to column layout */
-            align-items: left;
-            margin: 20px 100px;
+            justify-content: space-between; /* Distribute space between emojis */
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
         }
 
         .emoji-container span {
             font-size: 40px;
             cursor: pointer;
-            margin: 10px 0; /* Add margin between emojis */
+            margin: 10px;
         }
 
         .unusual-behavior {
             margin-top: 30px;
             font-size: 20px;
+            color: #000000;
         }
 
         .unusual-behavior label {
@@ -148,26 +151,25 @@
         .box-section {
             padding: 20px;
             margin-bottom: 20px;
-            background: rgba(2, 38, 49, 0.1);
+            background: #C1DAD6;
             border-radius: 10px;
         }
+
+        @media (max-width: 600px) {
+            .emoji-container span {
+                font-size: 30px; /* Adjust font size for smaller screens */
+                margin: 5px; /* Adjust margin for smaller screens */
+            }
+        }
+
+      
+    body{
+        background-color: #DCF0F7     ;
+    }
+
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <div class="header-left">
-            <span class="app-name">Shizotrack</span>
-        </div>
-        <div class="nav-container">
-            <a class="nav-link" href="{% url 'dashboard' %}">Home</a>
-            <a class="nav-link" href="{% url 'select_mood' %}">Mood</a>
-            <a class="nav-link" href="{% url 'select_symptom' %}">Symptom</a>
-            <a class="nav-link" href="{% url 'view_statistics' %}">View Statistics</a>
-            <a class="nav-link" href="{% url 'view_symptoms' %}">View Symptoms</a>
-            <a class="nav-link" href="{% url 'view_settings' %}">Settings</a>
-            <a class="nav-link" href="{% url 'logout' %}">Log out</a>
-        </div>
-    </div>
     <div class="main-container">
         <div class="form-container">
             <h2>How do you feel now?</h2>
