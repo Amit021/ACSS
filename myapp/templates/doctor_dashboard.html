@@ -40,7 +40,7 @@
             font-size: 24px;
             font-weight: bold;
             margin-left: 10px;
-            color: black;
+            color: #ffffff;
         }
 
         .header-container .nav-container {
@@ -49,7 +49,7 @@
         }
 
         .header-container .nav-link {
-            color: black;
+            color: white;
             text-decoration: none;
             margin: 0 10px;
             font-size: 16px;
@@ -219,7 +219,7 @@
                     <form method="POST">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn">Add Patient</button>
+                        <button type="submit" class="btn">Submit</button>
                     </form>
                 </div>
             </div>
@@ -227,7 +227,7 @@
                 <div class="patient-section">
                     <p><strong>Patient Username:</strong> {{ username }}</p>
                     <p><strong>Email:</strong> {{ data.patient.email }}</p>
-                    <h4>Symptom Records:</h4>
+                    <h6>Symptom Records:</h6>
                     <div id="accordion-{{ username }}">
                         {% with data.records as records %}
                             {% regroup records by timestamp.date as date_groups %}
