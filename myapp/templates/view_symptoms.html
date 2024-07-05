@@ -181,9 +181,8 @@
 </head>
 <body>
     <div class="header-container">
-        <div class="header-left">
-            <span class="app-name">ShizoTrack</span>
-        </div>
+        
+        <span class="app-name">Shizotrack</span>
         <div class="nav-container">
             <a class="nav-link" href="{% url 'dashboard' %}">Home</a>
             <a class="nav-link" href="{% url 'select_mood' %}">Mood</a>
@@ -194,298 +193,51 @@
             <a class="nav-link" href="{% url 'logout' %}">Log out</a>
         </div>
     </div>
-    <div class="main-container">
-        <div class="form-container">
-            <form id="symptomForm" method="post" action="{% url 'select_symptom' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="question form-section active">
-                    <h2>Hallucinations and Delusions <span class="info-icon" onclick="toggleDescription(this)">ℹ</span></h2>
-                    <div class="description">Hallucinations involve seeing, hearing, tasting, smelling, or feeling something that isn't there, while delusions are unshakable beliefs in something untrue.</div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Hearing Voices?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="hallucinations-hearing_voices" value="Yes"> Yes</label>
-                                <label><input type="radio" name="hallucinations-hearing_voices" value="No"> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Seeing Unreal Objects?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="hallucinations-seeing_unreal_objects" value="Yes"> Yes</label>
-                                <label><input type="radio" name="hallucinations-seeing_unreal_objects" value="No"> No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Want to add something further?</label>
-                            <textarea name="hallucinations-description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Severity</label>
-                            <div class="slider-container">
-                                <input type="range" name="hallucinations-severity" min="1" max="5" value="3" class="form-control">
-                                <span class="slider-value">3</span>
-                            </div>
-                        </div>
-                        <input type="hidden" name="hallucinations-severity-hidden" value="3">
-                    </div>
-                </div>
-
-                <div class="question form-section">
-                    <h2>Delusions <span class="info-icon" onclick="toggleDescription(this)">ℹ</span></h2>
-                    <div class="description">Delusions involve unshakable beliefs in something untrue.</div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Special Powers?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="delusions-special
-
-_powers" value="Yes"> Yes</label>
-                                <label ><input type="radio" name="delusions-special_powers" value="No"> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Fear of Plots?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="delusions-fear_of_plots" value="Yes"> Yes</label>
-                                <label><input type="radio" name="delusions-fear_of_plots" value="No"> No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="delusions-description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Severity</label>
-                            <div class="slider-container">
-                                <input type="range" name="delusions-severity" min="1" max="5" value="3" class="form-control">
-                                <span class="slider-value">3</span>
-                            </div>
-                        </div>
-                        <input type="hidden" name="delusions-severity-hidden" value="3">
-                    </div>
-                </div>
-
-                <div class="question form-section">
-                    <h2>Affective Flattening and Alogia <span class="info-icon" onclick="toggleDescription(this)">ℹ</span></h2>
-                    <div class="description">Affective flattening is a flat effect where there is a lack of emotional display on the face, while Alogia is decreased thought and speech productivity.</div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Lack of Emotion?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="flattening-lack_of_emotion" value="Yes"> Yes</label>
-                                <label><input type="radio" name="flattening-lack_of_emotion" value="No"> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Reduced Speech?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="flattening-reduced_speech" value="Yes"> Yes</label>
-                                <label><input type="radio" name="flattening-reduced_speech" value="No"> No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="flattening-description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Severity</label>
-                            <div class="slider-container">
-                                <input type="range" name="flattening-severity" min="1" max="5" value="3" class="form-control">
-                                <span class="slider-value">3</span>
-                            </div>
-                        </div>
-                        <input type="hidden" name="flattening-severity-hidden" value="3">
-                    </div>
-                </div>
-
-                <div class="question form-section">
-                    <h2>Avolition <span class="info-icon" onclick="toggleDescription(this)">ℹ</span></h2>
-                    <div class="description">Avolition is difficulty planning, starting, and sustaining activities. Fill up the questionnaire to specify more.</div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Lack of Motivation?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="avolition-lack_of_motivation" value="Yes"> Yes</label>
-                                <label><input type="radio" name="avolition-lack_of_motivation" value="No"> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Disinterest in Activities?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="avolition-disinterest_in_activities" value="Yes"> Yes</label>
-                                <label><input type="radio" name="avolition-disinterest_in_activities" value="No"> No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="avolition-description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Severity</label>
-                            <div class="slider-container">
-                                <input type="range" name="avolition-severity" min="1" max="5" value="3" class="form-control">
-                                <span class="slider-value">3</span>
-                            </div>
-                        </div>
-                        <input type="hidden" name="avolition-severity-hidden" value="3">
-                    </div>
-                </div>
-
-                <div class="question form-section">
-                    <h2>Difficulty in Memory <span class="info-icon" onclick="toggleDescription(this)">ℹ</span></h2>
-                    <div class="description">No explanation needed.</div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Trouble Concentrating?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="concentration_memory-trouble_concentrating" value="Yes"> Yes</label>
-                                <label><input type="radio" name="concentration_memory-trouble_concentrating" value="No"> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Forgetfulness?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="concentration_memory-forgetfulness" value="Yes"> Yes</label>
-                                <label><input type="radio" name="concentration_memory-forgetfulness" value="No"> No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="concentration_memory-description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Severity</label>
-                            <div class="slider-container">
-                                <input type="range" name="concentration_memory-severity" min="1" max="5" value="3" class="form-control">
-                                <span class="slider-value">3</span>
-                            </div>
-                        </div>
-                        <input type="hidden" name="concentration_memory-severity-hidden" value="3">
-                    </div>
-                </div>
-
-                <div class="question form-section">
-                    <h2>Difficulties in Social Cognition <span class="info-icon" onclick="toggleDescription(this)">ℹ</span></h2>
-                    <div class="description">Social cognition is how people process, store, and apply information about others and social situations.</div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Social Cues?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="social_cognition-social_cues" value="Yes"> Yes</label>
-                                <label><input type="radio" name="social_cognition-social_cues" value="No"> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label style="font-size: 22px;">Social Interaction Issues?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="social_cognition-social_interaction_issues" value="Yes"> Yes</label>
-                                <label><input type="radio" name="social_cognition-social_interaction_issues" value="No"> No</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="social_cognition-description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="box-section">
-                        <div class="form-group">
-                            <label>Severity</label>
-                            <div class="slider-container">
-                                <input type="range" name="social_cognition-severity" min="1" max="5" value="3" class="form-control">
-                                <span class="slider-value">3</span>
-                            </div>
-                        </div>
-                        <input type="hidden" name="social_cognition-severity-hidden" value="3">
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <button type="button" id="prevButton" class="btn btn-secondary" style="display: none;">Previous</button>
-                    <button type="button" id="nextButton" class="btn btn-primary">Next</button>
-                </div>
-            </form>
+    <div class="container">
+        <div class="main-container">
+            <div class="form-container">
+                <h1>Symptoms Over Time</h1>
+                {{ collapsible_html|safe }}
+                {% if user.role != 'doctor' %}
+                <form method="post" action="{% url 'send_symptoms_to_doctor' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Send Symptoms to Doctor</button>
+                </form>
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    <!-- Add Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.2.1
-
-.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let currentQuestion = 0;
-            const questions = document.querySelectorAll('.question');
-            const nextButton = document.getElementById('nextButton');
-            const prevButton = document.getElementById('prevButton');
-            const sliders = document.querySelectorAll('input[type="range"]');
-            const sliderValues = document.querySelectorAll('.slider-value');
-            const severityInputs = document.querySelectorAll('input[name$="-severity-hidden"]');
-
-            function showQuestion(index) {
-                questions.forEach((question, i) => {
-                    question.classList.toggle('active', i === index);
-                });
-                prevButton.style.display = index === 0 ? 'none' : 'inline-block';
-                nextButton.textContent = index === questions.length - 1 ? 'Submit' : 'Next';
-            }
-
-            nextButton.addEventListener('click', function() {
-                if (currentQuestion < questions.length - 1) {
-                    currentQuestion++;
-                    showQuestion(currentQuestion);
-                } else {
-                    document.getElementById('symptomForm').submit();
-                }
-            });
-
-            prevButton.addEventListener('click', function() {
-                if (currentQuestion > 0) {
-                    currentQuestion--;
-                    showQuestion(currentQuestion);
-                }
-            });
-
-            sliders.forEach((slider, index) => {
-                slider.addEventListener('input', function() {
-                    sliderValues[index].textContent = slider.value;
-                    severityInputs[index].value = slider.value;
+            var coll = document.querySelectorAll(".collapsible");
+            coll.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
                 });
             });
 
-            showQuestion(currentQuestion);
+            var searchInput = document.getElementById("searchInput");
+            searchInput.addEventListener("keyup", function() {
+                var filter = searchInput.value.toLowerCase();
+                var symptomItems = document.querySelectorAll(".symptom-item");
+
+                symptomItems.forEach(function(item) {
+                    var text = item.textContent || item.innerText;
+                    if (text.toLowerCase().indexOf(filter) > -1) {
+                        item.style.display = "";
+                    } else {
+                        item.style.display = "none";
+                    }
+                });
+            });
         });
-
-        function toggleDescription(icon) {
-            const description = icon.parentElement.nextElementSibling;
-            description.style.display = description.style.display === 'none' ? 'block' : 'none';
-        }
     </script>
 </body>
 </html>
-{% endblock %}
