@@ -9,19 +9,28 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-SECRET_KEY = 'django-insecure-y#vl1-99kdzw1uly5tkth4ym8y(ck3dmde^pbatqnslr2z4^06'
-import os
+
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-DEBUG = True  # Ensure this is True during development
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-y#vl1-99kdzw1uly5tkth4ym8y(ck3dmde^pbatqnslr2z4^06'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+
+ALLOWED_HOSTS = ['*']
+
+
+AUTH_USER_MODEL = 'myapp.CustomUser'
+
+# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,11 +46,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'ACSS.urls'
 
@@ -64,6 +74,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ACSS.wsgi.application'
 
 # Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -72,6 +84,8 @@ DATABASES = {
 }
 
 # Password validation
+# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -87,13 +101,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Internationalization
+# https://docs.djangoproject.com/en/4.1/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# Media files (Uploaded by users)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]

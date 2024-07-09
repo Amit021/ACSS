@@ -1,7 +1,7 @@
-from django.urls import path
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from . import views
-from django.conf import settings
-from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('', views.landing, name='landing'),
@@ -25,5 +25,5 @@ urlpatterns = [
     path('add_patient/', views.add_patient, name='add_patient'),
     path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
     path('dashboard/', views.dashboard, name='dashboard'), 
+    
 ]
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
