@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+  /* Style for select element */
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .select-wrapper select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  /* Style for textarea */
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+  }
+  
+  /* Bootstrap-like focus styles */
+  .select-wrapper select:focus,
+  textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  </style>
+    <h1>Symptoms Over Time</h1>
+    {% load custom_filters %}
+    <ul class="symptom-list">
+        {% for record in symptom_records %}
+        <li class="symptom-item">
+            <strong>Timestamp:</strong> {{ record.timestamp }}<br>
+            <strong>Symptom Type:</strong> {{ record.symptom_type }}<br>
+            <strong>Description:</strong> {{ record.description }}<br>
+            <strong>Severity:</strong> {{ record.severity }}<br>
+            <strong>MCQ Answers:</strong>
+            <ul class="mcq-answer">
+                {% for key, value in record.mcq_answers.items %}
+                    {% if key == "hallucinations_q1" %}
+                        <li>Question 1: In the past week, has the patient reported hearing voices that others do not hear? Answer: {{ value }} ({{ value|get_choice_text:hallucinations_q1_choices }})</li>
+                    {% elif key == "hallucinations_q2" %}
+                        <li>Question 2: Has the patient seen things that others cannot see within the last month? Answer: {{ value }} ({{ value|get_choice_text:hallucinations_q2_choices }})</li>
+                    {% elif key == "hallucinations_q3" %}
+                        <li>Question 3: Does the patient believe they have special powers or abilities that others do not possess? Answer: {{ value }} ({{ value|get_choice_text:hallucinations_q3_choices }})</li>
+                    {% elif key == "hallucinations_q4" %}
+                        <li>Question 4: Has the patient expressed fear that others are plotting against them or trying to harm them? Answer: {{ value }} ({{ value|get_choice_text:hallucinations_q4_choices }})</li>
+
+                    {% elif key == "flattening_q1" %}
+                        <li>Question 1: How often does the patient display a lack of emotional expression (e.g., not smiling, lack of facial expressions)? Answer: {{ value }} ({{ value|get_choice_text:flattening_q1_choices }})</li>
+                    {% elif key == "flattening_q2" %}
+                        <li>Question 2: Has the patient shown a reduced ability to express emotions (e.g., through gestures, tone of voice) recently? Answer: {{ value }} ({{ value|get_choice_text:flattening_q2_choices }})</li>
+                    {% elif key == "flattening_q3" %}
+                        <li>Question 3: Has the patient been speaking less frequently or with fewer words than usual? Answer: {{ value }} ({{ value|get_choice_text:flattening_q3_choices }})</li>
+                    {% elif key == "flattening_q4" %}
+                        <li>Question 4: Does the patient often have difficulty finding the right words to express themselves? Answer: {{ value }} ({{ value|get_choice_text:flattening_q4_choices }})</li>
+
+                    {% elif key == "avolition_q1" %}
+                        <li>Question 1: Has the patient shown a lack of motivation to start or complete tasks? Answer: {{ value }} ({{ value|get_choice_text:avolition_q1_choices }})</li>
+                    {% elif key == "avolition_q2" %}
+                        <li>Question 2: How often does the patient seem uninterested in participating in daily activities? Answer: {{ value }} ({{ value|get_choice_text:avolition_q2_choices }})</li>
+
+                    {% elif key == "difficulty_concentrating_q1" %}
+                        <li>Question 1: Has the patient had trouble concentrating on tasks or conversations recently? Answer: {{ value }} ({{ value|get_choice_text:difficulty_concentrating_q1_choices }})</li>
+                    {% elif key == "difficulty_concentrating_q2" %}
+                        <li>Question 2: How frequently does the patient appear easily distracted? Answer: {{ value }} ({{ value|get_choice_text:difficulty_concentrating_q2_choices }})</li>
+                    {% elif key == "difficulty_concentrating_q3" %}
+                        <li>Question 3: Does the patient have difficulty remembering appointments or daily tasks? Answer: {{ value }} ({{ value|get_choice_text:difficulty_concentrating_q3_choices }})</li>
+                    {% elif key == "difficulty_concentrating_q4" %}
+                        <li>Question 4: How often does the patient forget recent conversations or events? Answer: {{ value }} ({{ value|get_choice_text:difficulty_concentrating_q4_choices }})</li>
+                    {% elif key == "difficulty_concentrating_q5" %}
+                        <li>Question 5: Has the patient shown indecisiveness or difficulty making decisions? Answer: {{ value }} ({{ value|get_choice_text:difficulty_concentrating_q5_choices }})</li>
+                    {% elif key == "difficulty_concentrating_q6" %}
+                        <li>Question 6: How often does the patient take a long time to make simple decisions? Answer: {{ value }} ({{ value|get_choice_text:difficulty_concentrating_q6_choices }})</li>
+
+                    {% elif key == "social_cognition_q1" %}
+                        <li>Question 1: Has the patient had trouble understanding social cues or body language? Answer: {{ value }} ({{ value|get_choice_text:social_cognition_q1_choices }})</li>
+                    {% elif key == "social_cognition_q2" %}
+                        <li>Question 2: How frequently does the patient struggle to engage in social interactions or maintain relationships? Answer: {{ value }} ({{ value|get_choice_text:social_cognition_q2_choices }})</li>
+                    {% else %}
+                        <li>{{ key }}: {{ value }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+    function loadSettingsFromLocalStorage() {
+      var theme = localStorage.getItem("theme");
+      console.log("Loaded theme:", theme); // Debugging line
+      let idElement = document.getElementById("id");
+
+      if (theme === "dark") {
+        document.body.style.backgroundColor = "#343a40";
+        document.body.style.color = "#ffffff";
+      } else {
+        document.body.style.backgroundColor = "#f8f9fa";
+        document.form.style.color = "#343a40";
+      }
+    }
+
+    loadSettingsFromLocalStorage();
+  });
+    </script>
+{% endblock %}

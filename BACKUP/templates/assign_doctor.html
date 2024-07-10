@@ -1,0 +1,58 @@
+{% block title %}Assign Doctor{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .form-container {
+        margin-top: 50px;
+        max-width: 600px;
+        padding: 20px;
+        background: #f7f7f7;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container .button {
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .form-container .button:hover {
+        background-color: #0056b3;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        color: #0056b3;
+    }
+</style>
+
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center">Assign Doctor</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button">Assign Doctor</button>
+        </form>
+        <a href="{% url 'view_symptoms' %}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Symptoms
+        </a>
+    </div>
+</div>
+
+{% endblock %}

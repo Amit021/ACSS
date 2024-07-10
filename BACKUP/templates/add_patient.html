@@ -1,0 +1,17 @@
+<!-- add_patient.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Patient</title>
+</head>
+<body>
+    <h2>Add Patient</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Patient</button>
+    </form>
+</body>
+</html>
