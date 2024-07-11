@@ -60,7 +60,7 @@ jobs:
 
       - name: Clean up the ECS task definition JSON
         run: |
-          jq '{family: .family, taskRoleArn: .taskRoleArn, executionRoleArn: .executionRoleArn, networkMode: .networkMode, containerDefinitions: .containerDefinitions, requiresCompatibilities: .requiresCompatibilities, cpu: .cpu, memory: .memory, runtimePlatform: .runtimePlatform}' shizotrack-revision8-AWS-CLI-input.json > shizotrack-cleaned.json
+          jq '.taskDefinition | {family, taskRoleArn, executionRoleArn, networkMode, containerDefinitions, requiresCompatibilities, cpu, memory, runtimePlatform}' shizotrack-revision8-AWS-CLI-input.json > shizotrack-cleaned.json
 
       - name: Print cleaned ECS task definition JSON for debugging
         run: |
