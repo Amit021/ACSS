@@ -38,15 +38,21 @@ jobs:
 
       - name: Download ECS task definition
         run: |
-          aws ecs describe-task-definition --task-definition shizotrack > ecs_task_definition.json
+          aws ecs describe-task-definition --task-definition shizotrack > shizotrack-revision8.json
 
-      - name: Fill in the new image ID in the ECS task definition
+      - name: Fill in the new image ID in the ECS task definition (for macOS)
+        if: runner.os == 'macOS'
         run: |
-          sed -i 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' ecs_task_definition.json
+          sed -i '' 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' shizotrack-revision8.json
+
+      - name: Fill in the new image ID in the ECS task definition (for Linux)
+        if: runner.os != 'macOS'
+        run: |
+          sed -i 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' shizotrack-revision8.json
 
       - name: Register new task definition
         run: |
-          aws ecs register-task-definition --cli-input-json file://ecs_task_definition.json
+          aws ecs register-task-definition --cli-input-json file://shizotrack-revision8.json
 
       - name: Deploy to Amazon ECS
         run: |
