@@ -200,13 +200,14 @@ def view_symptoms(request):
 @login_required
 def view_statistics(request):
     print('view_statistics function called')
+    user = request.user  # Get the current logged-in user
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
 
     if not start_date or not end_date:
-        print('No start date or end date provided, fetching all records')
-        mood_statistics_data = MoodRecord.objects.values('mood_rating').annotate(count=models.Count('mood_rating'))
-        mood_feedback_data = MoodRecord.objects.values('timestamp', 'mood_rating')
+        print('No start date or end date provided, fetching all records for the current user')
+        mood_statistics_data = MoodRecord.objects.filter(user=user).values('mood_rating').annotate(count=models.Count('mood_rating'))
+        mood_feedback_data = MoodRecord.objects.filter(user=user).values('timestamp', 'mood_rating')
     else:
         print(f'Filtering records from {start_date} to {end_date}')
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -216,8 +217,8 @@ def view_statistics(request):
         start_date = timezone.make_aware(start_date)
         end_date = timezone.make_aware(end_date + timedelta(days=1))
 
-        mood_statistics_data = MoodRecord.objects.filter(timestamp__range=(start_date, end_date)).values('mood_rating').annotate(count=models.Count('mood_rating'))
-        mood_feedback_data = MoodRecord.objects.filter(timestamp__range=(start_date, end_date)).values('timestamp', 'mood_rating')
+        mood_statistics_data = MoodRecord.objects.filter(user=user, timestamp__range=(start_date, end_date)).values('mood_rating').annotate(count=models.Count('mood_rating'))
+        mood_feedback_data = MoodRecord.objects.filter(user=user, timestamp__range=(start_date, end_date)).values('timestamp', 'mood_rating')
 
     mood_statistics = list(mood_statistics_data)
     mood_feedback = list(mood_feedback_data)
@@ -232,7 +233,6 @@ def view_statistics(request):
 
     print('Rendering view_statistics.html with context')
     return render(request, 'view_statistics.html', context)
-
 @login_required
 def view_settings(request):
     return render(request, 'view_settings.html')
