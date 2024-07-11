@@ -361,46 +361,41 @@ def record_symptom(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+
+
+
 @login_required
 def send_symptoms_to_doctor(request):
+    print("send_symptoms_to_doctor view called")
+    
+    patient = request.user
+
+    # Check if the patient has an assigned doctor
     try:
-        patient = request.user
-        relationship = get_object_or_404(DoctorPatientRelationship, patient=patient)
-        doctor = relationship.doctor
-
-        symptom_records = SymptomRecord.objects.filter(user=patient).order_by('timestamp')
-        
-        data = []
-        for record in symptom_records:
-            data.append({
-                'timestamp': record.timestamp.isoformat(),
-                'symptom_type': record.symptom_type,
-                'description': record.description,
-                'severity': record.severity,
-                'mcq_answers': record.mcq_answers,
-            })
-        
-        request.session['sent_symptoms_data'] = data
-        
-        return JsonResponse({'status': 'success', 'message': 'Symptoms data sent to doctor.'})
+        relationship = DoctorPatientRelationship.objects.get(patient=patient)
     except DoctorPatientRelationship.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'No doctor assigned.'})
+        print("No doctor assigned")
+        return render(request, 'error.html', {'message': 'Sorry! No doctor has added you yet.'})
 
+    # If the doctor is assigned, proceed with sending symptoms
+    doctor = relationship.doctor
+    symptom_records = SymptomRecord.objects.filter(user=patient).order_by('timestamp')
+    
+    data = []
+    for record in symptom_records:
+        data.append({
+            'timestamp': record.timestamp.isoformat(),
+            'symptom_type': record.symptom_type,
+            'description': record.description,
+            'severity': record.severity,
+            'mcq_answers': record.mcq_answers,
+        })
+    
+    request.session['sent_symptoms_data'] = data
+    
+    print("Symptoms data sent to doctor successfully")
+    return render(request, 'success.html', {'message': 'Symptoms data sent to doctor successfully.'})
 
-@login_required
-def assign_doctor(request):
-    if request.method == 'POST':
-        form = AssignDoctorForm(request.POST)
-        if form.is_valid():
-            doctor = form.cleaned_data['doctor']
-            DoctorPatientRelationship.objects.update_or_create(
-                patient=request.user,
-                defaults={'doctor': doctor},
-            )
-            return redirect('view_symptoms')
-    else:
-        form = AssignDoctorForm()
-    return render(request, 'assign_doctor.html', {'form': form})
 
 
 @login_required

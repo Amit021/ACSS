@@ -42,7 +42,7 @@ jobs:
 
       - name: Fill in the new image ID in the ECS task definition
         run: |
-          sed -i.bak 's|<IMAGE_URI>|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' ecs_task_definition.json
+          sed -i.bak 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' ecs_task_definition.json
 
       - name: Register new task definition
         run: |

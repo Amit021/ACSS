@@ -21,7 +21,7 @@ urlpatterns = [
     path('add_feedback/<int:patient_id>/', views.add_feedback, name='add_feedback'),
     path('record_symptom/', views.record_symptom, name='record_symptom'),
     path('send_symptoms_to_doctor/', views.send_symptoms_to_doctor, name='send_symptoms_to_doctor'),
-    path('assign_doctor/', views.assign_doctor, name='assign_doctor'),
+    
     path('add_patient/', views.add_patient, name='add_patient'),
     path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
     path('dashboard/', views.dashboard, name='dashboard'), 
