@@ -38,21 +38,25 @@ jobs:
 
       - name: Download ECS task definition
         run: |
-          aws ecs describe-task-definition --task-definition shizotrack > shizotrack-revision8.json
+          aws ecs describe-task-definition --task-definition shizotrack > shizotrack-revision8-AWS-CLI-input.json
 
       - name: Fill in the new image ID in the ECS task definition (for macOS)
         if: runner.os == 'macOS'
         run: |
-          sed -i '' 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' shizotrack-revision8.json
+          sed -i '' 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' shizotrack-revision8-AWS-CLI-input.json
 
       - name: Fill in the new image ID in the ECS task definition (for Linux)
         if: runner.os != 'macOS'
         run: |
-          sed -i 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' shizotrack-revision8.json
+          sed -i 's|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|767397899756.dkr.ecr.eu-north-1.amazonaws.com/shizotrack:latest|g' shizotrack-revision8-AWS-CLI-input.json
+
+      - name: Clean up the ECS task definition JSON
+        run: |
+          jq '{family: .family, taskRoleArn: .taskRoleArn, executionRoleArn: .executionRoleArn, networkMode: .networkMode, containerDefinitions: .containerDefinitions, requiresCompatibilities: .requiresCompatibilities, cpu: .cpu, memory: .memory, runtimePlatform: .runtimePlatform}' shizotrack-revision8-AWS-CLI-input.json > shizotrack-cleaned.json
 
       - name: Register new task definition
         run: |
-          aws ecs register-task-definition --cli-input-json file://shizotrack-revision8.json
+          aws ecs register-task-definition --cli-input-json file://shizotrack-cleaned.json
 
       - name: Deploy to Amazon ECS
         run: |
